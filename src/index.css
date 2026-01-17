@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  /* ================================
+     Typography
+     ================================ */
+  --font-work-sans: "Work Sans", sans-serif;
+
+  /* ================================
+     Colors — Brand
+     ================================ */
+  --color-brand-primary: #333333;
+  --color-brand-accent: #d3122a;
+  --color-brand-success: #98d8ca;
+
+  /* ================================
+     Colors — Neutral (Grays)
+     ================================ */
+  --color-neutral-100: #f8f8f8;
+  --color-neutral-400: #999999;
+  --color-neutral-500: #7e7e7e;
+  --color-neutral-600: #777777;
+  --color-neutral-700: #666666;
+  --color-neutral-900: #333333;
+
+  --color-bgBlue: #e4eef8;
+  --color-green: #e3ecde;
+  --color-bgPink-200: #f8f4f0;
+  --color-bgPink-300: #f9f0ee;
+
+  /* ================================
+     Layout & Spacing
+     ================================ */
+  /*--container-max-width: 73.125rem;*/ /* 1170px */
+
+  /* ================================
+     Shadows
+     ================================ */
+  --shadow-sm: 0px 2px 5px #0003;
+  --shadow-md: -2px 2px 81px -27px rgba(0, 0, 0, 0.3);
+}
