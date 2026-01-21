@@ -5,9 +5,9 @@ defineProps({
     type: String,
     required: true,
   },
-  type: {
+  variant: {
     type: String,
-    // default: "medium",
+    default: "medium",
   },
   route: {
     type: String,
@@ -25,7 +25,7 @@ const types = {
     :is="route ? 'RouterLink' : 'button'"
     :class="[
       'inline-block cursor-pointer rounded-none border border-brand-primary bg-brand-primary font-medium tracking-[1px] text-white uppercase transition-all duration-300 hover:bg-[#0000] hover:text-brand-primary',
-      types[type],
+      types[variant],
     ]"
   >
     {{ text }}

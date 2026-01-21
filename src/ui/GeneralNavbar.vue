@@ -58,12 +58,12 @@ function toggleMobile() {
         <button class="text-xl">
           <Icon icon="mdi:search" class="size-5" />
         </button>
-        <button class="text-xl">
+        <RouterLink to="/account/login" class="text-xl">
           <Icon icon="mdi:user" class="size-5" />
-        </button>
-        <button class="text-xl">
+        </RouterLink>
+        <RouterLink to="/wishlist" class="text-xl">
           <Icon icon="mdi:heart-outline" class="size-5" />
-        </button>
+        </RouterLink>
         <button class="text-xl">
           <Icon icon="mdi:cart" class="size-5" />
         </button>

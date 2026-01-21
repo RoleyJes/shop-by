@@ -5,9 +5,11 @@ import EmblaCarousel from "@/ui/slider/EmblaCarousel.vue"
 </script>
 
 <template>
-  <EmblaCarousel />
-  <TabbedCollectionsDisplay />
-  <FooterBanner />
+  <main>
+    <EmblaCarousel />
+    <TabbedCollectionsDisplay />
+    <FooterBanner />
+  </main>
 </template>
 
 <style lang="scss" scoped></style>

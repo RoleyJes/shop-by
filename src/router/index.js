@@ -3,7 +3,9 @@ import Cart from "@/pages/Cart.vue"
 import Catalog from "@/pages/Catalog.vue"
 import Checkout from "@/pages/Checkout.vue"
 import Home from "@/pages/Home.vue"
+import Login from "@/pages/Login.vue"
 import Shop from "@/pages/Shop.vue"
+import Signup from "@/pages/Signup.vue"
 import Wishlist from "@/pages/Wishlist.vue"
 import GeneralLayout from "@/ui/GeneralLayout.vue"
 import { createRouter, createWebHistory } from "vue-router"
@@ -52,6 +54,17 @@ const router = createRouter({
           path: "checkout",
           component: Checkout,
           meta: { requiresAuth: true },
+        },
+
+        {
+          path: "account/login",
+          name: "login",
+          component: Login,
+        },
+        {
+          path: "account/register",
+          name: "signup",
+          component: Signup,
         },
 
         // {

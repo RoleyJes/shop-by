@@ -18,11 +18,11 @@ const breadcrumbs = [
   <BreadCrumbs :breadcrumbs="breadcrumbs" />
   <main>
     <RegistrationLayout
-      header="Login"
-      description="Please login using account detail below."
-      buttonText="Login"
-      other-page-path="/"
-      other-page-text="Forgot your password?"
+      header="Reset your password"
+      description="We will send you an email to reset your password."
+      buttonText="Submit"
+      other-page-path="/account/login"
+      other-page-text="Cancel"
     >
       <div class="space-y-5">
         <FormField inputType="text" placeholder="Email" autfocus aria-autocomplete="false" />
