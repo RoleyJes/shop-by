@@ -1,7 +1,7 @@
 <template>
   <div class="w-full bg-[#f6f6f6] py-7.5">
     <div class="mx-auto max-w-container px-3.75">
-      <p v-if="title" class="mb-5 text-3xl leading-[1.2] md:text-5xl">{{ title }}</p>
+      <p v-if="title" class="mb-5 text-3xl leading-[1.2] capitalize md:text-5xl">{{ title }}</p>
       <div class="flex w-full items-center gap-3">
         <template v-for="(link, i) in breadcrumbs" :key="i">
           <component

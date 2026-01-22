@@ -2,14 +2,25 @@
   <article class="group">
     <!-- Images -->
     <!-- This height should be temp because the images are the actual bgs in lezada and their height is determined by the grid cells -->
-    <div
+    <!-- <div
       class="group relative flex h-43.75 items-center justify-center overflow-hidden bg-[#f5f5f5] md:h-[445.5px] lg:h-97.75 xl:h-123.25"
+    > -->
+    <div
+      :class="[
+        'group relative min-h-px overflow-hidden bg-[#f5f5f5] pt-[130%] transition-all duration-250 ease-out',
+        imgContainerClass,
+      ]"
     >
       <img
         :src="image"
         alt="product on sale"
-        class="size-1/2 scale-130 object-contain lg:scale-110"
+        class="absolute top-1/2 left-1/2 size-1/2 -translate-x-1/2 -translate-y-1/2 scale-130 object-contain transition-all duration-900 xl:scale-110"
       />
+      <!-- <img
+        :src="image"
+        alt="product on sale"
+        class="size-1/2 scale-130 object-contain lg:scale-110"
+      /> -->
 
       <!-- Discount/banner?? -->
       <slot name="banner"></slot>
@@ -74,6 +85,10 @@ const props = defineProps({
   product: {
     type: Object,
     required: true,
+  },
+  imgContainerClass: {
+    type: String,
+    required: false,
   },
 })
 

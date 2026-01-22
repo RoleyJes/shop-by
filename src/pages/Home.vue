@@ -1,5 +1,5 @@
 <script setup>
-import TabbedCollectionsDisplay from "@/features/collections/home/TabbedCollectionsDisplay.vue"
+import TabbedCollectionsDisplay from "@/ui/TabbedCollectionsDisplay.vue"
 import FooterBanner from "@/ui/FooterBanner.vue"
 import EmblaCarousel from "@/ui/slider/EmblaCarousel.vue"
 </script>

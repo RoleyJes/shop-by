@@ -6,21 +6,37 @@
       <!-- Grid controls -->
       <div class="flex items-center gap-5">
         <Icon
-          icon="material-symbols-light:background-grid-small-sharp"
-          class="hidden cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary md:inline-block"
+          v-for="(icon, i) in icons"
+          :key="i"
+          @click="store.updateProductsPerRow(icon.num)"
+          :icon="icon.icon"
+          :class="[
+            'cursor-pointer text-2xl transition-all duration-300 hover:text-brand-primary',
+            icon.hidden ? 'hidden md:inline-block' : '',
+            icon.num === store.productsPerRow ? 'text-brand-primary' : 'text-[#ccc]',
+          ]"
         />
-        <Icon
+        <!-- <Icon
+          @click="store.updateProductsPerRow(3)"
           icon="material-symbols-light:grid-on-sharp"
-          class="hidden cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary md:inline-block"
+          :class="[
+            'cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary',
+          ]"
         />
         <Icon
+          @click="store.updateProductsPerRow(2)"
           icon="material-symbols-light:grid-view"
-          class="cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary"
+          :class="[
+            'cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary',
+          ]"
         />
         <Icon
+          @click="store.updateProductsPerRow(1)"
           icon="ion:list-sharp"
-          class="cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary"
-        />
+          :class="[
+            'cursor-pointer text-2xl text-[#ccc] transition-all duration-300 hover:text-brand-primary',
+          ]"
+        /> -->
       </div>
 
       <!-- Filter options -->
@@ -65,6 +81,7 @@
 import { Icon } from "@iconify/vue"
 import SelectField from "./SelectField.vue"
 import { ref } from "vue"
+import { useProductsStore } from "@/stores/products"
 
 const sortByOptions = ref([
   {
@@ -100,6 +117,28 @@ const sortByOptions = ref([
     value: "dateOldToNew",
   },
 ])
+const icons = ref([
+  {
+    icon: "material-symbols-light:background-grid-small-sharp",
+    hidden: true,
+    num: 4,
+  },
+  {
+    icon: "material-symbols-light:grid-on-sharp",
+    hidden: true,
+    num: 3,
+  },
+  {
+    icon: "material-symbols-light:grid-view",
+    num: 2,
+  },
+  {
+    icon: "ion:list-sharp",
+    num: 1,
+  },
+])
+
+const store = useProductsStore()
 </script>
 
 <style lang="scss" scoped></style>

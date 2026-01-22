@@ -28,7 +28,7 @@
       </div>
 
       <div class="mt-3">
-        <RouterLink> Coco Rose Body </RouterLink>
+        <RouterLink to="/"> Coco Rose Body </RouterLink>
         <p class="flex gap-5 text-sm font-semibold">
           <span class="">$55.00</span>
           <span class="text-[#aaaaaa] line-through">$75.00</span>
@@ -59,7 +59,7 @@ const data = ref([
   {
     heading: "Best Selling",
     links: [
-      { label: "Sandals", path: "/collections/fashion" },
+      { label: "Sandals", path: "/collections/bags" },
       { label: "Bast shoe", path: "/collections/all" },
       { label: "Blucher shoe", path: "/collections/all" },
       { label: "Boat shoe", path: "/collections/all" },
@@ -71,7 +71,7 @@ const data = ref([
   {
     heading: "New Product",
     links: [
-      { label: "Belt", path: "/collections/fashion" },
+      { label: "Belt", path: "/collections/books" },
       { label: "Wallets", path: "/collections/all" },
       { label: "Card Holders", path: "/collections/all" },
       { label: "Bags", path: "/collections/all" },

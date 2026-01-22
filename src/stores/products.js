@@ -5,6 +5,11 @@ export const useProductsStore = defineStore("products", () => {
   const products = ref([])
   const loading = ref(false)
   const error = ref(null)
+  const productsPerRow = ref(3)
+
+  function updateProductsPerRow(num) {
+    productsPerRow.value = num
+  }
 
   async function fetchProducts() {
     try {
@@ -21,5 +26,5 @@ export const useProductsStore = defineStore("products", () => {
     }
   }
 
-  return { products, fetchProducts, loading, error }
+  return { products, fetchProducts, loading, error, productsPerRow, updateProductsPerRow }
 })
