@@ -1,7 +1,8 @@
 <template>
   <article class="animate-pulse">
     <!-- Image skeleton -->
-    <div class="h-43.75 bg-gray-200 md:h-[445.5px] lg:h-97.75 xl:h-123.25" />
+    <!-- <div class="h-20 bg-gray-200 md:h-[445.5px] lg:h-97.75 xl:h-123.25" /> -->
+    <div class="h-40 bg-gray-200" />
 
     <!-- Text skeleton -->
     <div class="mt-4 space-y-3">

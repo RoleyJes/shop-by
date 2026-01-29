@@ -1,5 +1,6 @@
 <template>
-  <article class="group">
+  <article :class="['group', productsStore.productsPerRow === 1 ? 'md:flex md:gap-12' : '']">
+    <!-- <article class="group"> -->
     <!-- Images -->
     <!-- This height should be temp because the images are the actual bgs in lezada and their height is determined by the grid cells -->
     <!-- <div
@@ -29,14 +30,22 @@
       <div
         class="absolute top-1.5 right-2.5 z-9 flex flex-col gap-1.25 md:top-5 md:right-5 lg:items-end"
       >
-        <div class="flex flex-row-reverse items-center gap-4">
+        <!-- Wishlist -->
+        <button
+          class="flex flex-row-reverse items-center gap-4"
+          @click="wishlistStore.toggleWishlist(product)"
+        >
           <SmallIconInBg
-            icon="mdi:heart-outline"
-            class="peer text-neutral-500 transition-all duration-500 hover:text-brand-primary lg:translate-y-1.5 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100"
+            :icon="isWishlisted ? 'mdi:heart' : 'mdi:heart-outline'"
+            class="peer transition-all duration-500 lg:translate-y-1.5 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100"
+            :class="[
+              isWishlisted ? 'text-brand-primary' : 'text-neutral-500 hover:text-brand-primary',
+            ]"
           />
-          <Popup text="Add to wishlist" />
-        </div>
+          <Popup :text="`${isWishlisted ? 'Remove from' : 'Add to'} wishlist`" />
+        </button>
 
+        <!-- Compare -->
         <div class="flex flex-row-reverse items-center gap-4">
           <SmallIconInBg
             icon="iconoir:shuffle"
@@ -45,6 +54,7 @@
           <Popup text="Compare" />
         </div>
 
+        <!-- Quick View-->
         <div class="flex flex-row-reverse items-center gap-4">
           <SmallIconInBg
             icon="mdi:search"
@@ -59,13 +69,23 @@
     <div class="mt-3.75 md:mt-6.25">
       <div class="relative mb-2.5 text-base md:text-[17px] md:leading-[1.6] lg:mb-1">
         <h3
-          class="mb-3 line-clamp-1 transition-all duration-700 lg:mb-0 lg:group-hover:invisible lg:group-hover:-translate-y-3 lg:group-hover:opacity-0"
+          :class="[
+            'mb-3 transition-all duration-700',
+            productsStore.productsPerRow === 1
+              ? ''
+              : 'line-clamp-1 lg:mb-0 lg:group-hover:invisible lg:group-hover:-translate-y-3 lg:group-hover:opacity-0',
+          ]"
         >
           {{ title }}
         </h3>
         <slot name="floating-option">
           <button
-            class="inline-block text-brand-accent transition-all duration-700 lg:invisible lg:absolute lg:top-3 lg:opacity-0 lg:group-hover:visible lg:group-hover:top-0 lg:group-hover:opacity-100"
+            :class="[
+              'inline-block text-brand-accent transition-all duration-700',
+              productsStore.productsPerRow === 1
+                ? ''
+                : 'lg:invisible lg:absolute lg:top-3 lg:opacity-0 lg:group-hover:visible lg:group-hover:top-0 lg:group-hover:opacity-100',
+            ]"
           >
             + Add to cart
           </button>
@@ -77,9 +97,16 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue"
+import { computed, toRefs } from "vue"
 import SmallIconInBg from "./SmallIconInBg.vue"
 import Popup from "./Popup.vue"
+import { useProductsStore } from "@/stores/products"
+import { useWishlistStore } from "@/stores/wishlist"
+
+const productsStore = useProductsStore()
+const wishlistStore = useWishlistStore()
+
+const isWishlisted = computed(() => wishlistStore.wishlist.some((p) => p.id === product.value.id))
 
 const props = defineProps({
   product: {

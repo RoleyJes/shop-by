@@ -3,6 +3,10 @@ import { ref } from "vue"
 import Logo from "./Logo.vue"
 import { Icon } from "@iconify/vue"
 import CatalogDropdown from "./CatalogDropdown.vue"
+import FloatingNotification from "./FloatingNotification.vue"
+import { useWishlistStore } from "@/stores/wishlist"
+
+const wishlistStore = useWishlistStore()
 
 const mobileOpen = ref(false)
 const navLinks = ref([
@@ -55,17 +59,27 @@ function toggleMobile() {
 
       <!-- icons -->
       <div class="flex items-center space-x-3 text-brand-primary md:space-x-6">
+        <!-- Search -->
         <button class="text-xl">
           <Icon icon="mdi:search" class="size-5" />
         </button>
+
+        <!-- User -->
         <RouterLink to="/account/login" class="text-xl">
           <Icon icon="mdi:user" class="size-5" />
         </RouterLink>
-        <RouterLink to="/wishlist" class="text-xl">
+
+        <!-- Wishlist -->
+        <RouterLink to="/wishlist" class="relative text-xl">
           <Icon icon="mdi:heart-outline" class="size-5" />
+
+          <FloatingNotification v-if="wishlistStore.count" :value="wishlistStore.count" />
         </RouterLink>
-        <button class="text-xl">
+
+        <!-- Cart -->
+        <button class="relative text-xl">
           <Icon icon="mdi:cart" class="size-5" />
+          <FloatingNotification :value="5" />
         </button>
       </div>
 
