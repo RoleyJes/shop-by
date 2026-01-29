@@ -5,8 +5,11 @@ import { Icon } from "@iconify/vue"
 import CatalogDropdown from "./CatalogDropdown.vue"
 import FloatingNotification from "./FloatingNotification.vue"
 import { useWishlistStore } from "@/stores/wishlist"
+import OffcanvasCart from "@/features/cart/OffcanvasCart.vue"
+import { useCartStore } from "@/stores/cart"
 
 const wishlistStore = useWishlistStore()
+const cartStore = useCartStore()
 
 const mobileOpen = ref(false)
 const navLinks = ref([
@@ -77,9 +80,9 @@ function toggleMobile() {
         </RouterLink>
 
         <!-- Cart -->
-        <button class="relative text-xl">
+        <button class="relative text-xl" @click="cartStore.toggleOffcanvasCart()">
           <Icon icon="mdi:cart" class="size-5" />
-          <FloatingNotification :value="5" />
+          <FloatingNotification v-if="cartStore.count" :value="cartStore.count" />
         </button>
       </div>
 
@@ -99,6 +102,9 @@ function toggleMobile() {
       </nav>
     </transition>
   </header>
+
+  <!-- Cart Offcanvas -->
+  <OffcanvasCart />
 </template>
 
 <style>

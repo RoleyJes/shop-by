@@ -80,6 +80,7 @@
         </h3>
         <slot name="floating-option">
           <button
+            @click="cartStore.addToCart(product)"
             :class="[
               'inline-block text-brand-accent transition-all duration-700',
               productsStore.productsPerRow === 1
@@ -102,9 +103,11 @@ import SmallIconInBg from "./SmallIconInBg.vue"
 import Popup from "./Popup.vue"
 import { useProductsStore } from "@/stores/products"
 import { useWishlistStore } from "@/stores/wishlist"
+import { useCartStore } from "@/stores/cart"
 
 const productsStore = useProductsStore()
 const wishlistStore = useWishlistStore()
+const cartStore = useCartStore()
 
 const isWishlisted = computed(() => wishlistStore.wishlist.some((p) => p.id === product.value.id))
 
