@@ -1,14 +1,15 @@
-import Blog from "@/pages/Blog.vue"
-import Cart from "@/pages/Cart.vue"
-import Checkout from "@/pages/Checkout.vue"
-import ForgotPassword from "@/pages/auth/ForgotPassword.vue"
-import Home from "@/pages/Home.vue"
-import Login from "@/pages/auth/Login.vue"
-import Signup from "@/pages/auth/Signup.vue"
-import Wishlist from "@/pages/Wishlist.vue"
-import CollectionsView from "@/ui/CollectionsView.vue"
-import GeneralLayout from "@/ui/GeneralLayout.vue"
-import { createRouter, createWebHistory } from "vue-router"
+import Blog from "@/pages/Blog.vue";
+import Cart from "@/pages/Cart.vue";
+import Checkout from "@/pages/Checkout.vue";
+import ForgotPassword from "@/pages/auth/ForgotPassword.vue";
+import Home from "@/pages/Home.vue";
+import Login from "@/pages/auth/Login.vue";
+import Signup from "@/pages/auth/Signup.vue";
+import Wishlist from "@/pages/Wishlist.vue";
+import CollectionsView from "@/ui/CollectionsView.vue";
+import GeneralLayout from "@/ui/GeneralLayout.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import Account from "@/pages/Account.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,10 +55,16 @@ const router = createRouter({
         },
         {
           path: "checkout",
+          name: "checkout",
           component: Checkout,
           meta: { requiresAuth: true },
         },
 
+        {
+          path: "account",
+          name: "account",
+          component: Account,
+        },
         {
           path: "account/login",
           name: "login",
@@ -118,15 +125,15 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     // back/forward button
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     }
 
     // default: scroll to top
     return {
       top: 0,
       behavior: "smooth",
-    }
+    };
   },
-})
+});
 
-export default router
+export default router;

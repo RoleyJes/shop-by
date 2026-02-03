@@ -1,10 +1,14 @@
 <script setup>
+import { ref } from "vue"
 import { useCartStore } from "@/stores/cart"
 import ButtonOrLink from "@/ui/ButtonOrLink.vue"
 import { Icon } from "@iconify/vue"
 import { AnimatePresence, motion } from "motion-v"
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const cartStore = useCartStore()
+const agreed = ref(false)
 </script>
 
 <template>
@@ -92,14 +96,26 @@ const cartStore = useCartStore()
 
           <!-- Agree -->
           <div class="mb-2.5 flex items-center gap-2.5">
-            <input type="checkbox" name="t&c" id="t&c" />
-            <label for="t&c">I agree with the terms and conditions</label>
+            <input id="t-and-c" type="checkbox" v-model="agreed" />
+            <label for="t-and-c">I agree with the terms and conditions</label>
           </div>
 
           <!-- Buttons -->
-          <ButtonOrLink @click="cartStore.toggleOffcanvasCart()" text="checkout" />
+          <ButtonOrLink
+            :disabled="!agreed"
+            @click="
+              () => {
+                if (agreed) {
+                  cartStore.toggleOffcanvasCart()
+                  router.push({ name: 'checkout' })
+                }
+              }
+            "
+            text="checkout"
+            class="mb-3.75 w-full border-brand-accent! bg-brand-accent! hover:text-white! disabled:cursor-not-allowed! disabled:opacity-50"
+          />
 
-          <ButtonOrLink text="view cart" />
+          <ButtonOrLink text="view cart" class="w-full" />
         </section>
       </motion.div>
     </motion.div>
