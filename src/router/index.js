@@ -10,6 +10,7 @@ import CollectionsView from "@/ui/CollectionsView.vue";
 import GeneralLayout from "@/ui/GeneralLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import Account from "@/pages/Account.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +32,6 @@ const router = createRouter({
           path: "collections/:collection",
           name: "collections",
           component: CollectionsView,
-          // props: true, // ???????????????????????????????????????
         },
         {
           path: "blog",
@@ -63,21 +63,25 @@ const router = createRouter({
         {
           path: "account",
           name: "account",
+          meta: { requiresAuth: true },
           component: Account,
         },
         {
           path: "account/login",
           name: "login",
+          meta: { requiresGuests: true },
           component: Login,
         },
         {
           path: "account/register",
           name: "signup",
+          meta: { requiresGuests: true },
           component: Signup,
         },
         {
           path: "account/forgot-password",
           name: "forgot-password",
+          meta: { requiresGuests: true },
           component: ForgotPassword,
         },
 
@@ -134,6 +138,18 @@ const router = createRouter({
       behavior: "smooth",
     };
   },
+});
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore();
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return { name: "login" };
+  }
+
+  if (to.meta.requiresGuests && authStore.isAuthenticated) {
+    return { name: "home" };
+  }
 });
 
 export default router;

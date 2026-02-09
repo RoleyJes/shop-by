@@ -1,26 +1,29 @@
 <script setup>
-import { ref } from "vue"
-import Logo from "./Logo.vue"
-import { Icon } from "@iconify/vue"
-import CatalogDropdown from "./CatalogDropdown.vue"
-import FloatingNotification from "./FloatingNotification.vue"
-import { useWishlistStore } from "@/stores/wishlist"
-import OffcanvasCart from "@/features/cart/OffcanvasCart.vue"
-import { useCartStore } from "@/stores/cart"
+import { ref } from "vue";
+import Logo from "./Logo.vue";
+import { Icon } from "@iconify/vue";
+import CatalogDropdown from "./CatalogDropdown.vue";
+import FloatingNotification from "./FloatingNotification.vue";
+import { useWishlistStore } from "@/stores/wishlist";
+import OffcanvasCart from "@/features/cart/OffcanvasCart.vue";
+import { useCartStore } from "@/stores/cart";
+import { useAuthStore } from "@/stores/auth";
 
-const wishlistStore = useWishlistStore()
-const cartStore = useCartStore()
+const wishlistStore = useWishlistStore();
+const cartStore = useCartStore();
 
-const mobileOpen = ref(false)
+const authStore = useAuthStore();
+
+const mobileOpen = ref(false);
 const navLinks = ref([
   { path: "/", label: "Home" },
   { path: "/collections/all", label: "Shop" },
   { path: "/collections", label: "Catalog", dropdown: true },
   { path: "/blog", label: "Blog" },
-])
+]);
 
 function toggleMobile() {
-  mobileOpen.value = !mobileOpen.value
+  mobileOpen.value = !mobileOpen.value;
 }
 </script>
 
@@ -68,8 +71,9 @@ function toggleMobile() {
         </button>
 
         <!-- User -->
-        <RouterLink to="/account/login" class="text-xl">
-          <Icon icon="mdi:user" class="size-5" />
+        <RouterLink :to="authStore.isAuthenticated ? '/account' : '/account/login'" class="text-xl">
+          <!-- <Icon icon="mdi:user" class="size-5" /> -->
+          <Icon :icon="authStore.isAuthenticated ? 'mdi:user-add' : 'mdi:user'" class="size-5" />
         </RouterLink>
 
         <!-- Wishlist -->
