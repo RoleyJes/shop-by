@@ -14,18 +14,18 @@
         imgContainerClass,
       ]"
     > -->
-    <!-- <div
+    <div
       :class="[
         'group relative min-h-px overflow-hidden bg-[#f5f5f5] pt-[120%] transition-all duration-250 ease-out',
         imgContainerClass,
       ]"
-    > -->
-    <div
+    >
+      <!-- <div
       :class="[
         'group relative min-h-px overflow-hidden pt-[120%] transition-all duration-250 ease-out',
         imgContainerClass,
       ]"
-    >
+    > -->
       <!-- <img
         :src="image"
         alt="product on sale"

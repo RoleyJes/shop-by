@@ -6,6 +6,7 @@ import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import { AnimatePresence, motion } from "motion-v";
 import useCart from "@/composables/useCart";
+import { formatCurrency } from "@/utils/helpers";
 
 const router = useRouter();
 const cartStore = useCartStore();
@@ -82,7 +83,7 @@ const agreed = ref(false);
                 </div>
                 <p>
                   <span class="text-xs text-neutral-500">{{ product.quantity }} x </span>
-                  <span class="text-sm font-semibold">{{ product.price }}</span>
+                  <span class="text-sm font-semibold">{{ formatCurrency(product.price) }}</span>
                 </p>
               </div>
             </article>
@@ -93,7 +94,7 @@ const agreed = ref(false);
             class="mb-7.5 flex items-center justify-between border-y border-y-neutral-border py-2.5 font-semibold"
           >
             <p>Total:</p>
-            <p>{{ totalAmt }}</p>
+            <p>{{ formatCurrency(totalAmt) }}</p>
           </div>
 
           <!-- Agree -->
@@ -117,7 +118,12 @@ const agreed = ref(false);
             class="mb-3.75 w-full border-brand-accent! bg-brand-accent! hover:text-white! disabled:cursor-not-allowed! disabled:opacity-50"
           />
 
-          <ButtonOrLink text="view cart" class="w-full" />
+          <ButtonOrLink
+            @click="cartStore.toggleOffcanvasCart()"
+            :route="{ name: 'cart' }"
+            text="view cart"
+            class="w-full"
+          />
         </section>
       </motion.div>
     </motion.div>

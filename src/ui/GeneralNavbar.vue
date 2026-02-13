@@ -45,16 +45,23 @@ function toggleMobile() {
           <RouterLink
             v-if="!link.dropdown"
             :to="link.path"
-            class="leading-20 underline-offset-4 transition duration-300 hover:text-brand-primary hover:underline"
+            class="relative leading-20 transition duration-300 hover:text-brand-primary"
             >{{ link.label }}
+            <span
+              class="absolute -bottom-px left-0 inline-block h-px w-0 bg-brand-primary transition-all duration-300 group-hover:w-full"
+            ></span>
           </RouterLink>
 
           <div v-else class="group">
             <RouterLink
               :to="link.path"
-              class="flex items-center gap-0.5 leading-20 underline-offset-4 transition duration-300 hover:text-brand-primary hover:underline"
+              class="relative flex items-center gap-0.5 leading-20 transition duration-300 hover:text-brand-primary"
               >{{ link.label }}
               <Icon icon="ion:chevron-down-outline" class="text-[#d0d0d0]" />
+
+              <span
+                class="absolute top-12.5 left-0 inline-block h-px w-0 bg-brand-primary transition-all duration-300 group-hover:w-full"
+              ></span>
             </RouterLink>
 
             <!-- Catalog Dropdown -->
