@@ -6,11 +6,13 @@ import Home from "@/pages/Home.vue";
 import Login from "@/pages/auth/Login.vue";
 import Signup from "@/pages/auth/Signup.vue";
 import Wishlist from "@/pages/Wishlist.vue";
-import CollectionsView from "@/ui/CollectionsView.vue";
 import GeneralLayout from "@/ui/GeneralLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import Account from "@/pages/Account.vue";
 import { useAuthStore } from "@/stores/auth";
+import CollectionsQueryView from "@/ui/CollectionsQueryView.vue";
+import Catalog from "@/pages/Catalog.vue";
+import ProductDetail from "@/pages/ProductDetail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,23 +28,26 @@ const router = createRouter({
         },
         {
           path: "collections",
-          redirect: "collections/all",
+          name: "collections",
+          component: Catalog,
         },
         {
           path: "collections/:collection",
-          name: "collections",
-          component: CollectionsView,
+          name: "collections-query",
+          component: CollectionsQueryView,
         },
         {
           path: "blog",
           component: Blog,
         },
-        // {
-        //   path: 'products/:id',
-        //   name: 'product-details',
-        //   // component: ProductDetail,
-        //   component: PiniaProductDetail,
-        // },
+
+        // There is a /products page in Lezada, but i haven't seen what leads there. I only got there via typing in the url. That's where you get all the collections. The page is also the same for /collections. I just saw that it's the catalog button itself that actually leads to /collections which displays the same thing as /products
+        {
+          path: "products/:id",
+          name: "product-detail",
+          // component: ProductDetail,
+          component: ProductDetail,
+        },
         {
           path: "wishlist",
           component: Wishlist,
@@ -85,44 +90,6 @@ const router = createRouter({
           meta: { requiresGuests: true },
           component: ForgotPassword,
         },
-
-        // {
-        //   path: 'account',
-        //   redirect: 'account/profile',
-        //   component: AccountLayout,
-        //   meta: { requiresAuth: true },
-        //   children: [
-        //     {
-        //       path: 'profile',
-        //       name: 'profile',
-        //       component: Profile,
-        //     },
-        //     {
-        //       path: 'address',
-        //       name: 'address',
-        //       component: UserAddress,
-        //     },
-        //   ],
-        // },
-
-        // {
-        //   path: 'auth',
-        //   component: AuthLayout,
-        //   name: 'auth',
-        //   redirect: '/auth/login',
-        //   meta: { requiresGuests: true },
-        //   children: [
-        //     {
-        //       path: 'login',
-        //       name: 'login',
-        //       component: LogIn,
-        //     },
-        //     {
-        //       path: 'signup',
-        //       component: SignUp,
-        //     },
-        //   ],
-        // },
       ],
     },
   ],

@@ -1,5 +1,6 @@
 import { fetchAllProducts, fetchProductsByTab } from "@/services/apiProducts";
 import { useQuery } from "@tanstack/vue-query";
+import { computed } from "vue";
 import { ref } from "vue";
 
 export function useProducts() {
@@ -12,7 +13,7 @@ export function useProducts() {
 
   // Fetch products by tab
   const { isPending: isFetchingByTab, data: tabbedProducts } = useQuery({
-    queryKey: ["products", tab],
+    queryKey: computed(() => ["products", tab.value]),
     queryFn: () => fetchProductsByTab(tab.value),
   });
 

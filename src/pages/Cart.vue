@@ -5,6 +5,7 @@ import { Icon } from "@iconify/vue";
 import { formatCurrency } from "@/utils/helpers";
 import { reactive } from "vue";
 import { watch } from "vue";
+import QuantityOptions from "@/ui/QuantityOptions.vue";
 
 const { cartData, deletingId, deleteFromCart, addToCart, updateCart, updatingId } = useCart();
 
@@ -68,7 +69,7 @@ watch(
         </div>
 
         <!-- Quantity -->
-        <div class="flex items-center justify-center ps-6.25 pe-3.75">
+        <!-- <div class="flex items-center justify-center ps-6.25 pe-3.75">
           <div class="border-b-2 border-b-[#cccccc] pb-4">
             <button
               :disabled="deletingId === cartItem.id || updatingId === cartItem.id"
@@ -95,7 +96,20 @@ watch(
               <span>+</span>
             </button>
           </div>
-        </div>
+        </div> -->
+        <QuantityOptions
+          :item="cartItem"
+          v-model="localInputQuantity[cartItem.id]"
+          :updateMinus="() => updateCart({ id: cartItem.id, type: 'decrement' })"
+          :updatePlus="() => updateCart({ id: cartItem.id, type: 'increment' })"
+          :deletingId="deletingId"
+          :updatingId="updatingId"
+          :onBlur="
+            () => {
+              addToCart({ product_id: cartItem.id, quantity: localInputQuantity[cartItem.id] });
+            }
+          "
+        />
 
         <!-- Total -->
         <div class="flex items-center justify-center ps-6.25 pe-3.75">

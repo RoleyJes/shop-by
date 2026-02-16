@@ -20,36 +20,37 @@
         imgContainerClass,
       ]"
     >
-      <!-- <div
+      <RouterLink :to="{ name: 'product-detail', params: { id: product.id } }">
+        <!-- <div
       :class="[
         'group relative min-h-px overflow-hidden pt-[120%] transition-all duration-250 ease-out',
         imgContainerClass,
       ]"
     > -->
-      <!-- <img
+        <!-- <img
         :src="image"
         alt="product on sale"
         class="-translate-x1/2 -translate-y1/2 top1/2 left1/2 xl:scale90 absolute inset-0 aspect-9/11 size-full object-contain transition-all duration-900"
       /> -->
-      <img
-        :src="image"
-        alt="product on sale"
-        class="-translate-x1/2 -translate-y1/2 top1/2 left1/2 xl:scale90 absolute inset-0 size-full object-contain transition-all duration-900"
-      />
-      <!-- <img
+        <img
+          :src="image"
+          alt="product on sale"
+          class="-translate-x1/2 -translate-y1/2 top1/2 left1/2 xl:scale90 absolute inset-0 size-full object-contain transition-all duration-900"
+        />
+        <!-- <img
         :src="image"
         alt="product on sale"
         class="absolute top-1/2 left-1/2 size-4/5 -translate-x-1/2 -translate-y-1/2 object-contain transition-all duration-900 xl:scale-110"
       /> -->
-      <!-- <img
+        <!-- <img
         :src="image"
         alt="product on sale"
         class="size-1/2 scale-130 object-contain lg:scale-110"
       /> -->
 
-      <!-- Discount/banner?? -->
-      <slot name="banner"></slot>
-
+        <!-- Discount/banner?? -->
+        <slot name="banner"></slot>
+      </RouterLink>
       <!-- Floating icons -->
       <div
         class="absolute top-1.5 right-2.5 z-9 flex flex-col gap-1.25 md:top-5 md:right-5 lg:items-end"

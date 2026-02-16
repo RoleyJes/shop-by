@@ -9,3 +9,8 @@ export async function fetchProductsByTab(tab) {
   const res = await api.get(`/products?tab=${tab}&per_page=9`);
   return res.data.data;
 }
+
+export async function fetchSingleProduct(id) {
+  const res = await api.get(`/products/${id}`);
+  return res.data.data;
+}
