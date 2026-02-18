@@ -12,6 +12,7 @@ import ButtonOrLink from "@/ui/ButtonOrLink.vue";
 import ProductDetailSkeleton from "@/ui/ProductDetailSkeleton.vue";
 import useCart from "@/composables/useCart";
 import toast from "vue3-hot-toast";
+import useWishlist from "@/composables/useWishlist";
 
 const router = useRouter();
 const route = useRoute();
@@ -37,6 +38,8 @@ const {
   updatingId,
   updateCartbyQuantityInput,
 } = useCart();
+
+const { toggleWishlist, isAddingToWishlist, isDeletingFromWishlist, isInWishlist } = useWishlist();
 
 const existingCartItem = computed(() => getCartItemById(product.value?.id));
 
@@ -196,11 +199,7 @@ function handleAddToCart(product) {
       <section class="grid grid-cols-1 gap-7.5 pb-25 md:grid-cols-2">
         <!-- Image -->
         <div class="h-175 w-full overflow-hidden rounded-md">
-          <img
-            :src="product.image"
-            :alt="product.name"
-            class="w-full h-full object-cover"
-          />
+          <img :src="product.image" :alt="product.name" class="h-full w-full object-cover" />
         </div>
 
         <!-- Details -->
@@ -237,7 +236,6 @@ function handleAddToCart(product) {
           <!-- Quantity -->
           <div class="mb-10 flex items-center">
             <p class="basis-[25%]">Quantity:</p>
-            <!-- <QuantityOptions :item="product" v-model="localInputQuantity" /> -->
             <QuantityOptions
               :item="product"
               v-model="localInputQuantity"
@@ -258,9 +256,21 @@ function handleAddToCart(product) {
             <!-- Wishlist -->
             <div class="group relative">
               <button
-                class="peer flex h-12 w-12.5 items-center justify-center border border-[#d8d8d8] text-neutral-600 transition-all duration-300 ease-out hover:border-brand-primary hover:bg-brand-primary hover:text-white"
+                @click="toggleWishlist(product.id)"
+                :class="[
+                  `peer flex h-12 w-12.5 items-center justify-center border border-[#d8d8d8] transition-all duration-300 ease-out hover:border-brand-primary hover:bg-brand-primary hover:text-white ${isInWishlist(product.id) ? 'text-brand-primary' : 'text-neutral-600'}`,
+                ]"
               >
-                <Icon icon="mdi:heart-outline" class="size-6" />
+                <Icon
+                  :icon="
+                    isAddingToWishlist || isDeletingFromWishlist
+                      ? 'eos-icons:bubble-loading'
+                      : isInWishlist(product.id)
+                        ? 'mdi-heart'
+                        : 'mdi:heart-outline'
+                  "
+                  class="size-6"
+                />
               </button>
 
               <!-- Floating tooltip -->
@@ -270,7 +280,7 @@ function handleAddToCart(product) {
                 <p
                   class="relative bg-brand-primary px-2 py-1.5 text-xs text-nowrap text-white shadow-xl lg:inline-block"
                 >
-                  Add to wishlist
+                  {{ isInWishlist(product.id) ? "Remove from" : "Add to" }} wishlist
                   <span
                     class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-3 rotate-90 text-xl text-brand-primary"
                     >&#9654;</span
