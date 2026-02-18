@@ -27,7 +27,7 @@ export default function useCart() {
   } = useQuery({
     queryKey: ["cart"],
     queryFn: getCart,
-    enabled: authStore.isAuthenticated,
+    enabled: computed(() => authStore.isAuthenticated), //This would auto fetch the cart when the user's authenticated (loggedin/registered)
   });
 
   // Add to cart
@@ -92,10 +92,14 @@ export default function useCart() {
   const { mutate: clearCart, isPending: isClearingCart } = useMutation({
     mutationFn: clearCartApi,
     onSuccess: () => {
-      console.log("cleared");
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
+
+  // Get single cart item by id (This is for the productDetail page to get the quantity of the item in the cart if it already exists in the cart, also for the +/- btns to work if the item isn't in the cart)
+  const getCartItemById = (id) => {
+    return cartData.value?.find((item) => item.id === id);
+  };
 
   // Computed total amt
   const totalAmt = computed(() =>
@@ -123,5 +127,6 @@ export default function useCart() {
     updateCartbyQuantityInput,
     clearCart,
     isClearingCart,
+    getCartItemById,
   };
 }

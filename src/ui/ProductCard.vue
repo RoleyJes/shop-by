@@ -16,7 +16,7 @@
     > -->
     <div
       :class="[
-        'group relative min-h-px overflow-hidden bg-[#f5f5f5] pt-[120%] transition-all duration-250 ease-out',
+        'group relative min-h-px overflow-hidden bg-[#f5f5f5] pt-[120%] transition-all duration-250 ease-out md:pt-[90%] lg:pt-[80%]',
         imgContainerClass,
       ]"
     >
@@ -34,8 +34,8 @@
       /> -->
         <img
           :src="image"
-          alt="product on sale"
-          class="-translate-x1/2 -translate-y1/2 top1/2 left1/2 xl:scale90 absolute inset-0 size-full object-contain transition-all duration-900"
+          :alt="product.name || 'product image'"
+          class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
         />
         <!-- <img
         :src="image"

@@ -3,12 +3,15 @@ import { fetchSingleProduct } from "@/services/apiProducts";
 import BreadCrumbs from "@/ui/BreadCrumbs.vue";
 // import ProductCard from "@/ui/ProductCard.vue";
 import { useQuery } from "@tanstack/vue-query";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { formatCurrency } from "@/utils/helpers";
 import { Icon } from "@iconify/vue";
 import QuantityOptions from "@/ui/QuantityOptions.vue";
 import ButtonOrLink from "@/ui/ButtonOrLink.vue";
+import ProductDetailSkeleton from "@/ui/ProductDetailSkeleton.vue";
+import useCart from "@/composables/useCart";
+import toast from "vue3-hot-toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -25,6 +28,17 @@ const {
   queryKey: ["product", routeId],
   queryFn: () => fetchSingleProduct(routeId.value),
 });
+
+const {
+  getCartItemById,
+  addToCart,
+  isAddingToCart,
+  updateCart,
+  updatingId,
+  updateCartbyQuantityInput,
+} = useCart();
+
+const existingCartItem = computed(() => getCartItemById(product.value?.id));
 
 // It is product.value because useQuery returns a ref. So to access the product's name, we need to use product.value.name.
 const BClabel = computed(() => product.value?.name || "Product");
@@ -68,26 +82,33 @@ const skuData = [
 //   },
 // );
 
-const localInputQuantity = computed({
-  get() {
-    return product.value?.quantity || 1;
-  },
-  set(val) {
-    // This is where you would handle the logic to update the quantity in the backend or state management.
-    console.log("New quantity:", val);
-  },
-});
-
-// const localInputQuantity = ref(1);
-
-// watch(
-//   product,
-//   (newProd) => {
-//     if (!newProd) return;
-//     localInputQuantity.value = newProd.quantity;
+// const localInputQuantity = computed({
+//   get() {
+//     return product.value?.quantity || 1;
 //   },
-//   { immediate: true },
-// );
+//   set(val) {
+//     // This is where you would handle the logic to update the quantity in the backend or state management.
+//     console.log("New quantity:", val);
+//   },
+// });
+
+const localInputQuantity = ref(1);
+
+watch(
+  [() => existingCartItem.value, () => product.value],
+  ([cartItem, newProd]) => {
+    if (cartItem && cartItem.quantity != null) {
+      localInputQuantity.value = cartItem.quantity;
+      return;
+    }
+
+    // This is for when the user clicks on another product from the productDetail page while already on a productDetail page. So the product changes but the component doesn't unmount and remount because it's the same component, so we need to watch for changes in the product and update the localInputQuantity accordingly.
+    if (newProd) {
+      localInputQuantity.value = newProd.quantity || 1;
+    }
+  },
+  { immediate: true },
+);
 
 const activeTab = ref(1);
 
@@ -105,6 +126,49 @@ const tabs = [
     label: "Custom Tab",
   },
 ];
+
+function handleBlur(product) {
+  const inputValue = Number(localInputQuantity.value);
+  if (!inputValue || inputValue < 1 || inputValue > product.stock) {
+    localInputQuantity.value = existingCartItem.value?.quantity;
+    toast.error(`There are only ${product.stock} of this item in stock`);
+    return;
+  }
+
+  updateCartbyQuantityInput({
+    product_id: product.id,
+    quantity: Number(localInputQuantity.value),
+  });
+}
+
+function handleUpdatePlus(product) {
+  const existingItem = getCartItemById(product.id);
+  if (!existingItem) {
+    addToCart({ product_id: product.id, quantity: 1 });
+    return;
+  }
+
+  if (existingCartItem.value?.quantity === product.stock) {
+    toast.error(`You've added the max quantity of this item in stock (${product.stock})`);
+    return;
+  }
+  updateCart({ id: product.id, type: "increment" });
+}
+
+function handleUpdateMinus(product) {
+  const existingItem = getCartItemById(product.id);
+  if (!existingItem) return;
+  updateCart({ id: product.id, type: "decrement" });
+}
+
+function handleAddToCart(product) {
+  if (existingCartItem.value) {
+    toast.error("This item is already in your cart. You can update the quantity instead.");
+    return;
+  }
+  addToCart({ product_id: product.id, quantity: 1 });
+}
+
 // const temp = reactive({
 //   id: 84,
 //   name: "Louis Vuitton Tote - DarkCyan (Large)",
@@ -124,15 +188,19 @@ const tabs = [
 <template>
   <BreadCrumbs :breadcrumbs="breadcrumbs" />
   <main class="mx-auto w-full max-w-container px-3.75 py-20 md:py-25">
-    <div v-if="isPending">Fetching...</div>
+    <ProductDetailSkeleton v-if="isPending" />
     <div v-else-if="error">{{ error.message }}</div>
 
     <!-- Main details -->
     <div v-else class="">
       <section class="grid grid-cols-1 gap-7.5 pb-25 md:grid-cols-2">
         <!-- Image -->
-        <div class="h-175">
-          <img :src="product.image" :alt="product.name" class="size-full" />
+        <div class="h-175 w-full overflow-hidden rounded-md">
+          <img
+            :src="product.image"
+            :alt="product.name"
+            class="w-full h-full object-cover"
+          />
         </div>
 
         <!-- Details -->
@@ -169,11 +237,23 @@ const tabs = [
           <!-- Quantity -->
           <div class="mb-10 flex items-center">
             <p class="basis-[25%]">Quantity:</p>
-            <QuantityOptions :item="product" v-model="localInputQuantity" />
+            <!-- <QuantityOptions :item="product" v-model="localInputQuantity" /> -->
+            <QuantityOptions
+              :item="product"
+              v-model="localInputQuantity"
+              :updatingId="updatingId"
+              :updateMinus="() => handleUpdateMinus(product)"
+              :updatePlus="() => handleUpdatePlus(product)"
+              :onBlur="() => handleBlur(product)"
+            />
           </div>
           <!-- Cart/wishlist -->
           <div class="flex gap-5">
-            <ButtonOrLink text="Add to Cart" />
+            <ButtonOrLink
+              text="Add to Cart"
+              @click="() => handleAddToCart(product)"
+              :disabled="isAddingToCart"
+            />
 
             <!-- Wishlist -->
             <div class="group relative">

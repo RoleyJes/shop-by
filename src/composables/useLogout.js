@@ -12,6 +12,7 @@ export function useLogout() {
     mutationFn: logoutApi,
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["cart"] });
       authStore.clearToken();
       router.push({ name: "login" });
     },

@@ -18,10 +18,9 @@ const {
   isFetchingCart,
   fetchCartError,
   deletingId,
-  deleteFromCart,
-  // addToCart,
-  updateCart,
   updatingId,
+  deleteFromCart,
+  updateCart,
   updateCartbyQuantityInput,
   clearCart,
   isClearingCart,
@@ -120,34 +119,6 @@ watch(
           </div>
 
           <!-- Quantity -->
-          <!-- <div class="flex items-center justify-center ps-6.25 pe-3.75">
-          <div class="border-b-2 border-b-[#cccccc] pb-4">
-            <button
-              :disabled="deletingId === cartItem.id || updatingId === cartItem.id"
-              @click="updateCart({ id: cartItem.id, type: 'decrement' })"
-              class="text-xl disabled:cursor-not-allowed!"
-            >
-              <span>-</span>
-            </button>
-            <input
-              type="text"
-              v-model="localInputQuantity[cartItem.id]"
-              class="w-20 px-3.75 text-center focus:outline-0"
-              @blur="
-                () => {
-                  addToCart({ product_id: cartItem.id, quantity: localInputQuantity[cartItem.id] });
-                }
-              "
-            />
-            <button
-              :disabled="deletingId === cartItem.id || updatingId === cartItem.id"
-              class="w-5 text-xl disabled:cursor-not-allowed!"
-              @click="updateCart({ id: cartItem.id, type: 'increment' })"
-            >
-              <span>+</span>
-            </button>
-          </div>
-        </div> -->
           <QuantityOptions
             :item="cartItem"
             v-model="localInputQuantity[cartItem.id]"
@@ -257,7 +228,7 @@ watch(
               >
                 total
               </p>
-              <p class="ms-auto me-0 py-4 ps-2.5 pe-3.75 text-neutral-600">
+              <p class="ms-auto me-0 py-4 ps-2.5 pe-3.75 font-bold text-neutral-600">
                 {{ formatCurrency(totalAmt) }}
               </p>
             </div>

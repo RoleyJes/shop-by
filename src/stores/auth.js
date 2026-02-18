@@ -16,5 +16,10 @@ export const useAuthStore = defineStore("auth", () => {
 
   const isAuthenticated = computed(() => token.value !== null);
 
-  return { token, clearToken, isAuthenticated, setToken };
+  return {
+    token,
+    clearToken,
+    isAuthenticated,
+    setToken,
+  };
 });
