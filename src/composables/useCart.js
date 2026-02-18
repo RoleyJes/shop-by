@@ -4,6 +4,7 @@ import {
   deleteFromCart as deleteFromCartApi,
   getCart,
   updateCart as updateCartApi,
+  updateCartbyQuantityInput as updateCartbyQuantityInputApi,
 } from "@/services/apiCart";
 import { useAuthStore } from "@/stores/auth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
@@ -76,6 +77,17 @@ export default function useCart() {
     },
   });
 
+  // Update cart by quantity input (This is for the input field in the cart and productDetail)
+  const { mutate: updateCartbyQuantityInput } = useMutation({
+    mutationFn: updateCartbyQuantityInputApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
   // Clear cart
   const { mutate: clearCart, isPending: isClearingCart } = useMutation({
     mutationFn: clearCartApi,
@@ -108,6 +120,7 @@ export default function useCart() {
     isDeleting,
     updatingId,
     updateCart,
+    updateCartbyQuantityInput,
     clearCart,
     isClearingCart,
   };

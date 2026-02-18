@@ -23,6 +23,11 @@ export async function updateCart({ id, type }) {
   return res.data;
 }
 
+export async function updateCartbyQuantityInput(payload) {
+  const res = await api.post("/cart/updateQuantity", payload);
+  return res.data;
+}
+
 export async function clearCart() {
   const res = await api.delete("/cart/all");
   return res.data;

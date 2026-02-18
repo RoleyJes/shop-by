@@ -8,6 +8,7 @@ import { watch } from "vue";
 import QuantityOptions from "@/ui/QuantityOptions.vue";
 import ButtonOrLink from "@/ui/ButtonOrLink.vue";
 import { useRouter } from "vue-router";
+import toast from "vue3-hot-toast";
 
 const router = useRouter();
 const agreed = ref(false);
@@ -18,9 +19,10 @@ const {
   fetchCartError,
   deletingId,
   deleteFromCart,
-  addToCart,
+  // addToCart,
   updateCart,
   updatingId,
+  updateCartbyQuantityInput,
   clearCart,
   isClearingCart,
   totalAmt,
@@ -150,12 +152,32 @@ watch(
             :item="cartItem"
             v-model="localInputQuantity[cartItem.id]"
             :updateMinus="() => updateCart({ id: cartItem.id, type: 'decrement' })"
-            :updatePlus="() => updateCart({ id: cartItem.id, type: 'increment' })"
+            :updatePlus="
+              () => {
+                if (cartItem.quantity === cartItem.stock) {
+                  toast.error(
+                    `You've added the max quantity of this item in stock (${cartItem.stock})`,
+                  );
+                  return;
+                }
+                updateCart({ id: cartItem.id, type: 'increment' });
+              }
+            "
             :deletingId="deletingId"
             :updatingId="updatingId"
             :onBlur="
               () => {
-                addToCart({ product_id: cartItem.id, quantity: localInputQuantity[cartItem.id] });
+                const inputValue = Number(localInputQuantity[cartItem.id]);
+                if (!inputValue || inputValue < 1 || inputValue > cartItem.stock) {
+                  localInputQuantity[cartItem.id] = cartItem.quantity;
+                  toast.error(`There are only ${cartItem.stock} of this item in stock`);
+                  return;
+                }
+
+                updateCartbyQuantityInput({
+                  product_id: cartItem.id,
+                  quantity: localInputQuantity[cartItem.id],
+                });
               }
             "
           />

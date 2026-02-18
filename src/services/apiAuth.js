@@ -23,6 +23,5 @@ export async function getUser() {
 
 export async function logout() {
   const res = await api.post("/logout");
-  console.log(res.data);
   return res.data;
 }
