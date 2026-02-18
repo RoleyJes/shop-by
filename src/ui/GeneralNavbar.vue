@@ -4,13 +4,13 @@ import Logo from "./Logo.vue";
 import { Icon } from "@iconify/vue";
 import CatalogDropdown from "./CatalogDropdown.vue";
 import FloatingNotification from "./FloatingNotification.vue";
-import { useWishlistStore } from "@/stores/wishlist";
 import OffcanvasCart from "@/features/cart/OffcanvasCart.vue";
 import { useCartStore } from "@/stores/cart";
 import { useAuthStore } from "@/stores/auth";
 import useCart from "@/composables/useCart";
+import useWishlist from "@/composables/useWishlist";
 
-const wishlistStore = useWishlistStore();
+const { wishlistLength } = useWishlist();
 const cartStore = useCartStore();
 const authStore = useAuthStore();
 
@@ -88,7 +88,7 @@ function toggleMobile() {
         <RouterLink to="/wishlist" class="relative text-xl">
           <Icon icon="mdi:heart-outline" class="size-5" />
 
-          <FloatingNotification v-if="wishlistStore.count" :value="wishlistStore.count" />
+          <FloatingNotification v-if="wishlistLength > 0" :value="wishlistLength" />
         </RouterLink>
 
         <!-- Cart -->
@@ -98,7 +98,7 @@ function toggleMobile() {
           @click="cartStore.toggleOffcanvasCart()"
         >
           <Icon icon="mdi:cart" class="size-5" />
-          <FloatingNotification :value="cartLength" />
+          <FloatingNotification v-if="cartLength > 0" :value="cartLength" />
         </button>
       </div>
 

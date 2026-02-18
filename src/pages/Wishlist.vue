@@ -1,14 +1,12 @@
 <script setup>
-import { useWishlistStore } from "@/stores/wishlist"
-import BreadCrumbs from "@/ui/BreadCrumbs.vue"
-import ProductCard from "@/ui/ProductCard.vue"
+import useWishlist from "@/composables/useWishlist";
+import BreadCrumbs from "@/ui/BreadCrumbs.vue";
+import ProductCard from "@/ui/ProductCard.vue";
 // import { computed } from "vue"
 
-const wishlistStore = useWishlistStore()
+// const wishlistStore = useWishlistStore()
 
-// const wishlist = wishlistStore.wishlist
-
-// const
+const { wishlistData, wishlistLength } = useWishlist();
 
 const breadcrumbs = [
   {
@@ -18,13 +16,13 @@ const breadcrumbs = [
   {
     label: "Wishlist",
   },
-]
+];
 </script>
 
 <template>
   <BreadCrumbs :breadcrumbs="breadcrumbs" />
   <main class="mx-auto w-full max-w-container px-3.75 py-20 md:py-25">
-    <div class="space-y-2" v-if="!wishlistStore.count">
+    <div class="space-y-2" v-if="!wishlistLength">
       <h2 class="text-4xl">Your wishlist is currently empty!</h2>
       <p class="text-neutral-600">
         Continue browsing
@@ -41,7 +39,7 @@ const breadcrumbs = [
       v-else
       class="grid grid-cols-2 gap-3.75 md:grid-cols-3 md:gap-7.5 md:px-3.75 lg:grid-cols-4"
     >
-      <div v-for="product in wishlistStore.wishlist" :key="product.id">
+      <div v-for="product in wishlistData" :key="product.id">
         <ProductCard :product="product" />
       </div>
     </section>

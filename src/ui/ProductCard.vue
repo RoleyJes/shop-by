@@ -58,16 +58,24 @@
         <!-- Wishlist -->
         <button
           class="flex flex-row-reverse items-center gap-4"
-          @click="wishlistStore.toggleWishlist(product)"
+          @click="toggleWishlist(product.id)"
         >
           <SmallIconInBg
-            :icon="isWishlisted ? 'mdi:heart' : 'mdi:heart-outline'"
+            :icon="
+              isAddingToWishlist || isDeletingFromWishlist
+                ? 'eos-icons:bubble-loading'
+                : isInWishlist(product.id)
+                  ? 'mdi:heart'
+                  : 'mdi:heart-outline'
+            "
             class="peer transition-all duration-500 lg:translate-y-1.5 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100"
             :class="[
-              isWishlisted ? 'text-brand-primary' : 'text-neutral-500 hover:text-brand-primary',
+              isInWishlist(product.id)
+                ? 'text-brand-primary'
+                : 'text-neutral-500 hover:text-brand-primary',
             ]"
           />
-          <Popup :text="`${isWishlisted ? 'Remove from' : 'Add to'} wishlist`" />
+          <Popup :text="`${isInWishlist(product.id) ? 'Remove from' : 'Add to'} wishlist`" />
         </button>
 
         <!-- Compare -->
@@ -125,18 +133,20 @@
 </template>
 
 <script setup>
-import { computed, toRefs } from "vue";
+import { toRefs } from "vue";
 import SmallIconInBg from "./SmallIconInBg.vue";
 import Popup from "./Popup.vue";
 import { useProductsStore } from "@/stores/products";
-import { useWishlistStore } from "@/stores/wishlist";
+// import { useWishlistStore } from "@/stores/wishlist";
 import useCart from "@/composables/useCart";
+import useWishlist from "@/composables/useWishlist";
 
 const productsStore = useProductsStore();
-const wishlistStore = useWishlistStore();
+// const wishlistStore = useWishlistStore();
 const { addToCart, isAddingToCart } = useCart();
+const { toggleWishlist, isInWishlist, isAddingToWishlist, isDeletingFromWishlist } = useWishlist();
 
-const isWishlisted = computed(() => wishlistStore.wishlist.some((p) => p.id === product.value.id));
+// const isWishlisted = computed(() => wishlistStore.wishlist.some((p) => p.id === product.value.id));
 
 const props = defineProps({
   product: {
