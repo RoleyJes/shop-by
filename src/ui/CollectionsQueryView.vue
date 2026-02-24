@@ -10,6 +10,7 @@ import SideFilters from "./SideFilters.vue";
 import { useProducts } from "@/composables/useProducts";
 
 const route = useRoute();
+console.log(route.query);
 const store = useProductsStore();
 
 const curOpen = ref(null);
@@ -86,14 +87,36 @@ const breadcrumbs = [
 // This is for the breadcrumbs
 const collection = computed(() => route.params.collection);
 
-const { allProducts, isFetchingAllProducts } = useProducts();
+const {
+  allProductsData,
+  isFetchingAllProducts,
+  page: pageVQ,
+  url: urlVQ,
+  allProductsError,
+} = useProducts();
+
+function handlePrev() {
+  if (pageVQ.value === 1) return;
+  urlVQ.value = allProductsData.value?.prev_page_url;
+  pageVQ.value--;
+}
+
+function handleNext() {
+  if (allProductsData.value?.last_page === pageVQ.value) return;
+  urlVQ.value = allProductsData.value?.next_page_url;
+  pageVQ.value++;
+}
 </script>
 
 <template>
   <BreadCrumbs :breadcrumbs="breadcrumbs" :title="collection === 'all' ? 'products' : collection" />
 
   <!-- Shop page header -->
-  <ShopPageHeader />
+  <ShopPageHeader
+    :from="allProductsData?.from"
+    :to="allProductsData?.to"
+    :total="allProductsData?.total"
+  />
 
   <section
     class="mx-auto my-16.25 grid w-full max-w-container grid-cols-1 gap-x-7.5 px-3.75 md:my-17.5 md:px-7.5 lg:mt-20 lg:mb-25 lg:grid-cols-[270px_1fr]"
@@ -122,7 +145,7 @@ const { allProducts, isFetchingAllProducts } = useProducts();
       </div>
 
       <!-- Error -->
-      <!-- <div v-else-if="error">Error: {{ error.message }}</div> -->
+      <div v-else-if="allProductsError">Error: {{ allProductsError.message }}</div>
 
       <!-- Products -->
       <div
@@ -135,7 +158,7 @@ const { allProducts, isFetchingAllProducts } = useProducts();
           store.productsPerRow === 1 ? 'grid-cols-1' : '',
         ]"
       >
-        <div v-for="product in allProducts.data" :key="product.id">
+        <div v-for="product in allProductsData.data" :key="product.id">
           <ProductCard
             :product="product"
             class="transition-all transition-discrete duration-500"
@@ -145,6 +168,35 @@ const { allProducts, isFetchingAllProducts } = useProducts();
             "
           />
         </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="mt-30 flex items-center justify-center gap-6">
+        <button
+          class="pb-3 text-neutral-50 transition-all duration-300 ease-out hover:text-brand-primary"
+          @click="handlePrev"
+        >
+          Prev
+        </button>
+        <button
+          class="border-b px-2 pb-3 transition-all duration-300 ease-out"
+          :class="
+            page === pageVQ
+              ? 'border-b-neutral-50 text-brand-primary'
+              : 'border-b-transparent text-neutral-50'
+          "
+          v-for="page in allProductsData?.last_page"
+          :key="page"
+          @click="pageVQ = page"
+        >
+          {{ page }}
+        </button>
+        <button
+          class="pb-3 text-neutral-50 transition-all duration-300 ease-out hover:text-brand-primary"
+          @click="handleNext"
+        >
+          Next
+        </button>
       </div>
     </main>
   </section>

@@ -5,10 +5,17 @@ import { ref } from "vue";
 
 export function useProducts() {
   const tab = ref("new");
+  const page = ref(1);
+  const url = ref(null);
+
   // Fetch all products
-  const { isPending: isFetchingAllProducts, data: allProducts } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchAllProducts,
+  const {
+    isPending: isFetchingAllProducts,
+    data: allProductsData,
+    error: allProductsError,
+  } = useQuery({
+    queryKey: computed(() => ["products", page.value, url.value]),
+    queryFn: () => fetchAllProducts({ page: page.value, url: url.value }),
   });
 
   // Fetch products by tab
@@ -17,5 +24,14 @@ export function useProducts() {
     queryFn: () => fetchProductsByTab(tab.value),
   });
 
-  return { isFetchingAllProducts, tab, allProducts, isFetchingByTab, tabbedProducts };
+  return {
+    isFetchingAllProducts,
+    tab,
+    page,
+    url,
+    allProductsData,
+    allProductsError,
+    isFetchingByTab,
+    tabbedProducts,
+  };
 }

@@ -3,7 +3,7 @@ import { Icon } from "@iconify/vue";
 import SelectField from "./SelectField.vue";
 import { ref } from "vue";
 import { useProductsStore } from "@/stores/products";
-import { useProducts } from "@/composables/useProducts";
+// import { useProducts } from "@/composables/useProducts";
 
 const sortByOptions = ref([
   {
@@ -63,7 +63,17 @@ const icons = ref([
 
 const store = useProductsStore();
 
-const { allProducts } = useProducts();
+defineProps({
+  from: {
+    type: Number,
+  },
+  to: {
+    type: Number,
+  },
+  total: {
+    type: Number,
+  },
+});
 </script>
 
 <template>
@@ -93,19 +103,13 @@ const { allProducts } = useProducts();
         <!-- Paginated details -->
         <p class="hidden lg:block">
           <span
-            >Showing <span>{{ allProducts?.from }}</span> – <span>10</span> of
-            <span>{{ allProducts?.total }}</span> results</span
+            >Showing <span>{{ from }}</span> – <span>{{ to }}</span> of
+            <span>{{ total }}</span> results</span
           >
         </p>
 
         <!-- Number of displayed products per page -->
-        <div class="hidden items-center gap-2 md:flex">
-          <span>Show</span>
-          <SelectField name="show" id="show" value="10">
-            <option v-for="(_, i) in 10" :key="i" :value="i + 1">{{ i + 1 }}</option>
-          </SelectField>
-          <span class="hidden lg:block">per page</span>
-        </div>
+        slot
 
         <!-- Sort by -->
         <div class="hidden items-center gap-2 md:flex">
